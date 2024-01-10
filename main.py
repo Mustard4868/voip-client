@@ -1,5 +1,4 @@
-from send import send_sip_request
-from receive import receive_sip_request
+from sip import send_sip_request, receive_sip_request
 
 from utils import *
 
