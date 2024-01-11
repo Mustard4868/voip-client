@@ -4,7 +4,7 @@ def create_call_id():   # Create 32bit call identifier.
     return random.getrandbits(32)
 
 def create_branch():    # Create 8bit branch identifier.
-    return str("z9hG4bK"+random.getrandbits(8))
+    return "z9hG4bK"+str(random.getrandbits(8))
 
 def send_sip_request(destination_ip, destination_port):
     sip_request = (

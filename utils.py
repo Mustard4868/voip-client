@@ -8,7 +8,7 @@ import random
 samplerate = 44100
 
 self_ip = socket.gethostbyname(socket.gethostname())
-destination_ip = "192.168.0.100"
+destination_ip = input("Destination IP: ")
 server_ip = "192.168.1.254"
 port = 5000
 
