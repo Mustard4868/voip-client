@@ -1,6 +1,11 @@
 import socket
 import threading
+import sqlite3
+import sounddevice as sd
+import numpy as np
 import random
+
+samplerate = 44100
 
 self_ip = socket.gethostbyname(socket.gethostname())
 destination_ip = "192.168.0.100"
