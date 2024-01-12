@@ -3,15 +3,12 @@ from utils import *
 
 def main():
 
-    send_thread = threading.Thread(send_sip_request(destination_ip, port))
-    receive_thread = threading.Thread(receive_sip_request(self_ip, port))
+    send_thread = threading.Thread(send_sip_request(destination_ip, send_port))
+    receive_thread = threading.Thread(receive_sip_request(self_ip, receive_port))
 
-    send_thread.start()
     receive_thread.start()
-
-    #send_sip_request(destination_ip, port)
-    #receive_sip_request(self_ip, port)
-
+    send_thread.start()
+    
     send_thread.join()
     receive_thread.join()
 

@@ -20,9 +20,9 @@ def send_sip_request(destination_ip, destination_port):
         f"Content-Length: 0\r\n\r\n"
     )
     try:
-        udp_socket.sendto(sip_request.encode(), (destination_ip, destination_port))
+        send_socket.sendto(sip_request.encode(), (destination_ip, destination_port))
 
-        response, addr = udp_socket.recvfrom(4096)
+        response, addr = receive_socket.recvfrom(4096)
         print(f"Received response from {addr}:\n{response.decode()}")
     
     except socket.error as e:
@@ -37,25 +37,25 @@ def accept(client_address):
     else:   # Prompt user again if incorrect input was given.
         accept()
 
-def receive_sip_request(self_ip, port):
+async def receive_sip_request(self_ip, port):
 
     print(f"Listening to {self_ip}:{port}")
 
     while True:
         try:
-            data, client_address = udp_socket.recvfrom(4096)
+            data, client_address = receive_socket.recvfrom(4096)
             print(f"Received SIP request from {client_address}:\n{data.decode()}")
             
             response = "SIP/2.0 200 OK\r\n...\r\n"
-            udp_socket.sendto(response.encode(), client_address)
+            send_socket.sendto(response.encode(), client_address)
 
             x = accept(client_address)
             if x == True:
                 response = "SIP/2.0 ACK\r\n...\r\n"
-                udp_socket.sendto(response.encode(), client_address)
+                send_socket.sendto(response.encode(), client_address)
             elif x == False:
                 response = "SIP/2.0 603 Decline\r\n...\r\n"
-                udp_socket.sendto(response.encode(), client_address)
+                send_socket.sendto(response.encode(), client_address)
 
         except socket.error as e:
             print(f"Error: {e}")
