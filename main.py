@@ -3,14 +3,8 @@ from utils import *
 
 def main():
 
-    send_thread = threading.Thread(send_sip_request(destination_ip, send_port))
-    receive_thread = threading.Thread(receive_sip_request(self_ip, receive_port))
-
-    receive_thread.start()
-    send_thread.start()
-    
-    send_thread.join()
-    receive_thread.join()
+    receive_sip_request_thread = threading.Thread(target=receive_sip_request(self_ip, port))
+    receive_sip_request_thread.start()
 
 if __name__ == "__main__":
     main()
