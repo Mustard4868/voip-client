@@ -1,16 +1,13 @@
 from utils import *
 
-def get_dest():
-    dest = input("Target IP: ")
-    return dest
-
 def create_call_id():   # Create 32bit call identifier.
     return random.getrandbits(32)
 
 def create_branch():    # Create 8bit branch identifier.
     return "z9hG4bK"+str(random.getrandbits(8))
 
-def send_sip(destination_ip, destination_port):
+def send_sip(destination_ip:str, destination_port:int):
+    print("...")
     sip_request = (
         f"INVITE sip:destination@{destination_ip}:{port} SIP/2.0\r\n"
         f"Via: SIP/2.0/UDP {self_ip}:{port};branch={create_branch()}\r\n"
@@ -25,38 +22,26 @@ def send_sip(destination_ip, destination_port):
     )
     try:
         udp_sock.sendto(sip_request.encode(), (destination_ip, destination_port))
-
         response, addr = udp_sock.recvfrom(4096)
         print(f"Received response from {addr}:\n{response.decode()}")
     
     except socket.error as e:
         print(f"Error: {e}")
 
-def accept(client_address):
-    reply = input(f"Incoming call from {client_address}. Accept? Y/N")
-    if reply.capitalize() == "Y":
-        return True
-    elif reply.capitalize() == "N":
-        return False
-    else:   # Prompt user again if incorrect input was given.
-        accept()
-
-def receive_sip(self_ip, port):
-
+def receive_sip():
+    print("Hi")
     while True:
         try:
             data, client_address = udp_sock.recvfrom(4096)
             print(f"Received SIP request from {client_address}:\n{data.decode()}")
             
-            response = "SIP/2.0 200 OK\r\n...\r\n"
-            udp_sock.sendto(response.encode(), client_address)
-
-            x = accept(client_address)
-            if x == True:
-                response = "SIP/2.0 ACK\r\n...\r\n"
-                udp_sock.sendto(response.encode(), client_address)
-            elif x == False:
-                response = "SIP/2.0 603 Decline\r\n...\r\n"
+            responses = [
+                "SIP/2.0 100 Trying\r\n...\r\n",
+                "SIP/2.0 180 Ringing\r\n...\r\n",
+                "SIP/2.0 200 OK\r\n...\r\n"
+            ]
+            
+            for response in responses:
                 udp_sock.sendto(response.encode(), client_address)
 
         except socket.error as e:
