@@ -2,6 +2,7 @@ from utils import *
 
 transmit_voice = False
 duration = 10
+buffer = 4096
 
 def prompt(client_addr):
     accept = input(f"Incoming call from: {client_addr} \nAccept? Y/N: ").capitalize()
@@ -20,18 +21,22 @@ def receive_data():
         else: transmit_data("BYE")
 
     if "OKAY" in r_data:
-        transmit_voice = True
+        voice_thread.start()
         transmit_data("OKAY")
 
     if "BYE" in r_data:
-        transmit_voice = False
+        voice_thread.join()
         transmit_data("BYE")
 
-while transmit_voice == True:
-    audio = sd.rec(
+def transmit_voice():
+    audio_data = sd.rec(
         int(duration * samplerate),
         samplerate = samplerate,
         channels = 1,
         dtype = "int16"
     )
     sd.wait()
+
+    for i in range(0, len(audio_data), buffer):
+        chunk = audio_data[i:i+buffer]
+        transmit_sock.sendto(chunk.tobytes(), destination_addr)

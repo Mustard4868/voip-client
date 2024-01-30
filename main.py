@@ -1,13 +1,10 @@
-from sip import send_sip, receive_sip
+from comm import *
 from utils import *
 
 def main():
 
-    transmit = threading.Thread(target=send_sip)
-    transmit.start()
-    
-    receive = threading.Thread(target=receive_sip)
-    receive.start()
+    receive_thread.start()
+#   voice_thread.start() called by receive_data()
 
 if __name__ == "__main__":
     main()

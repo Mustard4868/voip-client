@@ -8,6 +8,9 @@ import sounddevice as sd
 
 """ Global variables. """
 
+receive_thread = threading.Thread(target=receive_data)
+voice_thread = threading.Thread(target=transmit_voice)
+
 samplerate = 44100
 
 r_port = 5060
