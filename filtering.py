@@ -1,8 +1,16 @@
 from pydub import AudioSegment
 import numpy as np
+from utils import *
 
-
-def capture_audio():
+def capturing_audio():
+    chunksize = 4096
+    #sampling rate is 44100
+    Paudio = pyaudo.PyAudio()
+    recorddata = Paudio.open(format=pyaudio.paInt16,
+                channels=1,
+                rate=sample_rate,
+                input=True,
+                frames_per_buffer=chunk_size)
     
 
 data = []
