@@ -2,29 +2,35 @@ from pydub import AudioSegment
 import numpy as np
 from utils import *
 
-def capturing_audio():
+def captured_audio():
     chunksize = 4096
     #sampling rate is 44100
-    Paudio = pyaudo.PyAudio()
-    recorddata = Paudio.open(format=pyaudio.paInt16,
+    pydubaudio = pyaudo.PyAudio()
+    stream = pydubaudio.open(format=pyaudio.paInt16,
                 channels=1,
-                rate=sample_rate,
+                samplerate=samplerate,
                 input=True,
-                frames_per_buffer=chunk_size)
+                frames_per_buffer=chunksize)
     
+    audio_data = []
+    captureactivity = True
 
-data = []
-data.append(np.random.rand(44100))
-i = 0
-def filter_audio(data):
-    filtered_data = []
-    for audio_segment in data:
-        audio_segment = AudioSegment(audio_segment.tobytes(), sample_width=audio_segment.dtype.itemsize, frame_rate=44100, channels=1)
-        filtered_audio = audio_segment.low_pass_filter(1000)
-        filteredaudionump = np.array(filtered_audio.get_array_of_samples(), dtype=np.float32)
-        filtered_data.append(filteredaudionump)
-    return filtered_data
+    while captureactivity:
+            data = recorddata.read(chunksize)
+            audio_data.append(np.frombuffer(data, dtype=np.int16)
 
-filtered_data = filter_audio(data)
- #print(filtered_data)
+                  
+    stream = stop_stream()
+    stream.close()
+    pydubaudio.terminate()
+    captured_audio = np.concatenate(audio_data)
+    audio_segment = AudioSegment(captured_audio.tobytes(), sample_width=captured_audio.dtype.itemsize, frame_rate=samplerate, channels=1)
 
+    
+    ####APPLYING LOWPASS FILTER
+    filtered_audio = audio_segment.low_pass_filter(1000)
+    filtered_audionump = np.array(filtered_audio.get_array_of_samples(), dtype=np.int16)
+    return filtered_audioumnp
+
+
+CAPTURED_FILTERED = captured_audio()
