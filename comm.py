@@ -1,6 +1,7 @@
 from utils import *
 
 transmit_voice = False
+duration = 10
 
 def prompt(client_addr):
     accept = input(f"Incoming call from: {client_addr} \nAccept? Y/N: ").capitalize()
@@ -27,4 +28,10 @@ def receive_data():
         transmit_data("BYE")
 
 while transmit_voice == True:
-    
+    audio = sd.rec(
+        int(duration * samplerate),
+        samplerate = samplerate,
+        channels = 1,
+        dtype = "int16"
+    )
+    sd.wait()
