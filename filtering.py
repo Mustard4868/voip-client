@@ -1,6 +1,10 @@
 from pydub import AudioSegment
 import numpy as np
 
+
+def capture_audio():
+    
+
 data = []
 data.append(np.random.rand(44100))
 i = 0
