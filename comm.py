@@ -1,4 +1,5 @@
 from utils import *
+from main import *
 
 transmit_voice = False
 duration = 10
@@ -20,13 +21,16 @@ def receive_data():
             transmit_data("OKAY")
         else: transmit_data("BYE")
 
-    if "OKAY" in r_data:
+    elif "OKAY" in r_data:
         voice_thread.start()
         transmit_data("OKAY")
 
-    if "BYE" in r_data:
+    elif "BYE" in r_data:
         voice_thread.join()
         transmit_data("BYE")
+    
+    else:
+        play_audio(r_data)
 
 def transmit_voice():
     audio_data = sd.rec(
@@ -40,3 +44,8 @@ def transmit_voice():
     for i in range(0, len(audio_data), buffer):
         chunk = audio_data[i:i+buffer]
         transmit_sock.sendto(chunk.tobytes(), destination_addr)
+
+def play_audio(data):
+    audio = np.frombuffer(data, dtype=np.int16)
+    sd.play(audio, samplerate=samplerate)
+    sd.wait()

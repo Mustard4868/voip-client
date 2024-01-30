@@ -10,6 +10,7 @@ import sounddevice as sd
 
 receive_thread = threading.Thread(target=receive_data)
 voice_thread = threading.Thread(target=transmit_voice)
+playback_thread = threading.Thread(target=play_audio)
 
 samplerate = 44100
 
