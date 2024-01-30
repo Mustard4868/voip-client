@@ -2,10 +2,13 @@
 import socket
 import random
 import threading
+import wave
+import numpy as np
+import sounddevice as sd
 
 """ Global variables. """
 
-transmit_voice = False # Indicator for audio recording and playback.
+samplerate = 44100
 
 r_port = 5060
 t_port = 23456
