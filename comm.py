@@ -1,5 +1,4 @@
 from utils import *
-from main import *
 
 transmit_voice = False
 duration = 10
