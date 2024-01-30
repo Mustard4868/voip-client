@@ -9,11 +9,11 @@ def create_branch():    # Create 8bit branch identifier.
 def send_sip(destination_ip:str, destination_port:int):
     print("...")
     sip_request = (
-        f"INVITE sip:destination@{destination_ip}:{port} SIP/2.0\r\n"
-        f"Via: SIP/2.0/UDP {self_ip}:{port};branch={create_branch()}\r\n"
+        f"INVITE sip:destination@{destination_ip}:{r_port} SIP/2.0\r\n"
+        f"Via: SIP/2.0/UDP {self_ip}:{r_port};branch={create_branch()}\r\n"
         f"Max-Forwards: 70\r\n"
-        f"To: <sip:destination@{destination_ip}:{port}>\r\n"
-        f"From: <sip:sender@{self_ip}:{port}>;tag=123456\r\n"
+        f"To: <sip:destination@{destination_ip}:{r_port}>\r\n"
+        f"From: <sip:sender@{self_ip}:{t_port}>;tag=123456\r\n"
         f"Call-ID: {create_call_id()}@{self_ip}\r\n"
         f"CSeq: 1 INVITE\r\n"
         f"Contact: <sip:sender@{self_ip}:{port}>\r\n"
@@ -21,18 +21,17 @@ def send_sip(destination_ip:str, destination_port:int):
         f"Content-Length: 0\r\n\r\n"
     )
     try:
-        udp_sock.sendto(sip_request.encode(), (destination_ip, destination_port))
-        response, addr = udp_sock.recvfrom(4096)
+        transmit_sock.sendto(sip_request.encode(), (destination_ip, r_port))
+        response, addr = receive_sock.recvfrom(4096)
         print(f"Received response from {addr}:\n{response.decode()}")
     
     except socket.error as e:
         print(f"Error: {e}")
 
 def receive_sip():
-    print("Hi")
     while True:
         try:
-            data, client_address = udp_sock.recvfrom(4096)
+            data, client_address = receive_sock.recvfrom(4096)
             print(f"Received SIP request from {client_address}:\n{data.decode()}")
             
             responses = [
@@ -42,7 +41,7 @@ def receive_sip():
             ]
             
             for response in responses:
-                udp_sock.sendto(response.encode(), client_address)
+                transmit_sock.sendto(response.encode(), client_address)
 
         except socket.error as e:
             print(f"Error: {e}")
