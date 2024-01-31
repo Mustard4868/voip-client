@@ -44,7 +44,7 @@ def transmit_voice():
         chunk = audio_data[i:i+buffer]
         transmit_sock.sendto(chunk.tobytes(), destination_addr)
 
-def play_audio(data):
+def play_audio(data, samplerate):
     audio = np.frombuffer(data, dtype=np.int16)
     sd.play(audio, samplerate=samplerate)
     sd.wait()

@@ -6,13 +6,6 @@ import wave
 import numpy as np
 import sounddevice as sd
 
-""" Initialize threads. """
-from comm import receive_data, transmit_voice, play_audio
-
-receive_thread = threading.Thread(target=receive_data)
-voice_thread = threading.Thread(target=transmit_voice)
-playback_thread = threading.Thread(target=play_audio)
-
 """ Global variables. """
 samplerate = 44100
 
