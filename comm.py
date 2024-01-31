@@ -1,6 +1,20 @@
 from utils import *
 
-transmit_voice = False
+def transmit_voice():
+    audio_data = sd.rec(
+        int(duration * samplerate),
+        samplerate = samplerate,
+        channels = 1,
+        dtype = "int16"
+    )
+    sd.wait()
+
+    for i in range(0, len(audio_data), buffer):
+        chunk = audio_data[i:i+buffer]
+        transmit_sock.sendto(chunk.tobytes(), destination_addr)
+
+transmit_voice_thread = threading.Thread(target=transmit_voice)
+
 duration = 10
 buffer = 4096
 
@@ -24,35 +38,21 @@ def receive_data():
 
     elif "OKAY" in d_data:
         print(f"@{client_addr}: {d_data}")
-        voice_thread.start()
+        transmit_voice_thread.start()
         transmit_data("OKAY")
 
     elif "BYE" in d_data:
         print(f"@{client_addr}: {d_data}")
-        voice_thread.join()
+        transmit_voice_thread.join()
         transmit_data("BYE")
     
     else:
         play_audio(r_data)
-
-def transmit_voice():
-    audio_data = sd.rec(
-        int(duration * samplerate),
-        samplerate = samplerate,
-        channels = 1,
-        dtype = "int16"
-    )
-    sd.wait()
-
-    for i in range(0, len(audio_data), buffer):
-        chunk = audio_data[i:i+buffer]
-        transmit_sock.sendto(chunk.tobytes(), destination_addr)
 
 def play_audio(data, samplerate):
     audio = np.frombuffer(data, dtype=np.int16)
     sd.play(audio, samplerate=samplerate)
     sd.wait()
 
-if self_ip != "192.168.2.167"
+if self_ip != "192.168.2.167":
     transmit_data("HELLO")
-    
