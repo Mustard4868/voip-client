@@ -14,17 +14,21 @@ def transmit_data(t_data):
 
 def receive_data():
     r_data, client_addr = receive_sock.recvfrom(4096)
+    d_data = r_data.decode()
 
-    if "HELLO" in r_data:
+    if "HELLO" in d_data:
+        print(f"@{client_addr}: {d_data}")
         if prompt(client_addr) == True:
             transmit_data("OKAY")
         else: transmit_data("BYE")
 
-    elif "OKAY" in r_data:
+    elif "OKAY" in d_data:
+        print(f"@{client_addr}: {d_data}")
         voice_thread.start()
         transmit_data("OKAY")
 
-    elif "BYE" in r_data:
+    elif "BYE" in d_data:
+        print(f"@{client_addr}: {d_data}")
         voice_thread.join()
         transmit_data("BYE")
     
@@ -48,3 +52,5 @@ def play_audio(data, samplerate):
     audio = np.frombuffer(data, dtype=np.int16)
     sd.play(audio, samplerate=samplerate)
     sd.wait()
+
+transmit_data("HELLO")
