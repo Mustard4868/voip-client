@@ -53,4 +53,6 @@ def play_audio(data, samplerate):
     sd.play(audio, samplerate=samplerate)
     sd.wait()
 
-transmit_data("HELLO")
+if self_ip != "192.168.2.167"
+    transmit_data("HELLO")
+    
