@@ -23,36 +23,45 @@ def prompt(client_addr):
     if accept == "Y": return True
     elif accept == "N": return False
 
-def transmit_data(t_data):
+def transmit_data(t_data, addr):
+    dest_ip = addr.split(",")[1]
+    print(dest_ip)
     transmit_sock.sendto(t_data.encode(), destination_addr)
 
 def receive_data():
-    r_data, client_addr = receive_sock.recvfrom(4096)
-    d_data = r_data.decode()
+    i = 0
+    while True:
+        r_data, client_addr = receive_sock.recvfrom(4096)
+        d_data = r_data.decode()
 
-    if "HELLO" in d_data:
-        print(f"@{client_addr}: {d_data}")
-        if prompt(client_addr) == True:
-            transmit_data("OKAY")
-        else: transmit_data("BYE")
+        if "HELLO" in d_data:
+            print(f"@{client_addr}: {d_data}")
+            if prompt(client_addr) == True:
+                transmit_data("OKAY")
+            else: transmit_data("BYE")
 
-    elif "OKAY" in d_data:
-        print(f"@{client_addr}: {d_data}")
-        transmit_voice_thread.start()
-        transmit_data("OKAY")
+        elif "OKAY" in d_data:
+            print(f"@{client_addr}: {d_data}")
+            transmit_voice_thread.start()
+            if i != 0:
+                pass
+            else:
+                transmit_data("OKAY")
+                i = 1
 
-    elif "BYE" in d_data:
-        print(f"@{client_addr}: {d_data}")
-        transmit_voice_thread.join()
-        transmit_data("BYE")
-    
-    else:
-        play_audio(r_data)
+        elif "BYE" in d_data:
+            print(f"@{client_addr}: {d_data}")
+            transmit_voice_thread.join()
+            if i == 0:
+                pass
+            else:
+                transmit_data("BYE")
+                i = 0
+        
+        else:
+            play_audio(r_data)
 
 def play_audio(data, samplerate):
     audio = np.frombuffer(data, dtype=np.int16)
     sd.play(audio, samplerate=samplerate)
     sd.wait()
-
-if self_ip != "192.168.2.167":
-    transmit_data("HELLO")
