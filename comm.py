@@ -24,9 +24,9 @@ def prompt(client_addr):
     elif accept == "N": return False
 
 def transmit_data(t_data, addr):
-    dest_ip = addr.split(",")[1]
-    print(dest_ip)
-    transmit_sock.sendto(t_data.encode(), destination_addr)
+    dest_ip = list(addr)[1]
+    dest_addr = (dest_ip, r_port)
+    transmit_sock.sendto(t_data.encode(), dest_addr)
 
 def receive_data():
     i = 0
@@ -65,3 +65,7 @@ def play_audio(data, samplerate):
     audio = np.frombuffer(data, dtype=np.int16)
     sd.play(audio, samplerate=samplerate)
     sd.wait()
+
+if self_ip != destination_ip:
+    msg = "HELLO"
+    transmit_sock.sendto(msg.encode(), destination_addr)
