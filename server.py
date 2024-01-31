@@ -24,8 +24,8 @@ def receive():
     decoded_data = data.decode()
     fields = decoded_data.split()
 
-    dest_ip = fields[1]
-    t_data = fields[2]
+    dest_ip = fields[0]
+    t_data = fields[1]
 
     transmit(t_data.encode(), dest_ip)
 

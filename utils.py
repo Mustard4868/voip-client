@@ -13,7 +13,7 @@ r_port = 5060
 t_port = 23456
 self_ip = socket.gethostbyname(socket.gethostname())
 
-destination_ip = "192.168.2.167"
+destination_ip = "192.168.2.101"
 destination_addr = (destination_ip, r_port)
 
 """ Port configuration. """

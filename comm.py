@@ -24,7 +24,7 @@ def prompt(client_addr):
     elif accept == "N": return False
 
 def transmit_data(t_data, addr):
-    dest_ip = list(addr)[1]
+    dest_ip = list(addr)[0]
     dest_addr = (dest_ip, r_port)
     transmit_sock.sendto(t_data.encode(), dest_addr)
 
@@ -37,25 +37,25 @@ def receive_data():
         if "HELLO" in d_data:
             print(f"@{client_addr}: {d_data}")
             if prompt(client_addr) == True:
-                transmit_data("OKAY")
-            else: transmit_data("BYE")
+                transmit_data("OKAY", client_addr)
+            else: transmit_data("BYE", client_addr)
 
         elif "OKAY" in d_data:
             print(f"@{client_addr}: {d_data}")
-            transmit_voice_thread.start()
             if i != 0:
                 pass
             else:
-                transmit_data("OKAY")
+                transmit_data("OKAY", client_addr)
+                transmit_voice_thread.start()
                 i = 1
 
         elif "BYE" in d_data:
             print(f"@{client_addr}: {d_data}")
-            transmit_voice_thread.join()
             if i == 0:
                 pass
             else:
-                transmit_data("BYE")
+                transmit_data("BYE", client_addr)
+                transmit_voice_thread.join()
                 i = 0
         
         else:
