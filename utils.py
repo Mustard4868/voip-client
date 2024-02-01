@@ -3,6 +3,9 @@ import threading
 import pyaudio
 import socket
 
+""" Global variables. """
+self_ip = socket.gethostbyname(socket.gethostname())
+
 """ Define sockets. """
 class voipSockets(object):
 
