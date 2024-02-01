@@ -1,8 +1,8 @@
 import threading
 
-class voipThreads(object):
+class voipThreads:
 
     def __init__(self):
 
-        self.recieve = threading.Thread(target = receive_data)
-        self.transmit = threading.Thread(target = transmit_data)
+        self.recieve = threading.Thread()
+        self.transmit = threading.Thread()

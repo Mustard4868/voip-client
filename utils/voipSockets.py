@@ -1,6 +1,6 @@
 import socket
 
-class voipSockets(object):
+class voipSockets:
 
     def __init__(self):
 
