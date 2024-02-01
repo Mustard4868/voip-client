@@ -1,14 +1,19 @@
 from utils import *
 
-class voipThreads:
+def receive_data():
+    # create function to receive data using socket
+    print("Data")
+
+class voipThreads(object):
+
     def __init__(self):
 
-        receive = threading.Thread(target = receive_data).start()
+        self.recieve = threading.Thread(target = receive_data)
 
 
 def main():
-    
-    voipThreads.receive.start()
+
+    voipThreads().recieve.start()
 
 if __name__ == "__main__":
     main()
