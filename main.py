@@ -1,14 +1,11 @@
 from utils import *
 
-def receive_data():
-    # create function to receive data using socket
-    print("Data")
-
 class voipThreads(object):
 
     def __init__(self):
 
         self.recieve = threading.Thread(target = receive_data)
+        self.transmit = threading.Thread(target = transmit_data)
 
 
 def main():
