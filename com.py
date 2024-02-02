@@ -1,5 +1,3 @@
-from utils import *
-import socket
+from utils.voipSockets import *
+import time
 
-def recieve_data():
-    data, addr = voipSockets.UDP_IN.recvfrom(4096)
